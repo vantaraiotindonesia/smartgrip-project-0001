@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SmartGrip</title>
+
+        <!-- Tailwind -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            body {
+                font-family: "Plus Jakarta Sans", sans-serif;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50">
+        <!-- Sidebar Desktop -->
+        <aside
+            class="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:w-64 bg-white shadow-md p-6"
+        >
+            <!-- Brand -->
+            <div class="flex items-center gap-3 mb-8">
+                <img
+                    src="./img/logo smartgrip.png"
+                    alt="logo"
+                    class="w-10 h-10"
+                />
+                <span class="text-xl font-bold">SMARTGRIP</span>
+            </div>
+
+            <!-- Menu -->
+            <nav class="flex flex-col gap-2 text-sm">
+                <a
+                    href="dashboard.html"
+                    class="flex items-center gap-3 p-3 rounded-md bg-blue-50 text-blue-600 font-semibold"
+                    >Dashboard</a
+                >
+                <a
+                    href="insights.html"
+                    class="flex items-center gap-3 p-3 rounded-md hover:bg-gray-100"
+                    >Graph Insights</a
+                >
+                <a
+                    href="change-password.html"
+                    class="flex items-center gap-3 p-3 rounded-md hover:bg-gray-100"
+                    >Ganti Password</a
+                >
+                <!-- Notification Button -->
+                <button
+                    id="notifDesktop"
+                    class="flex items-center gap-3 p-3 rounded-md hover:bg-gray-100 relative"
+                >
+                    Notifications
+                    <span
+                        id="notifBadgeDesktop"
+                        class="hidden absolute right-3 top-2 w-2 h-2 bg-red-500 rounded-full"
+                    ></span>
+                </button>
+                <button
+                    href="login.html"
+                    id="logoutDesktop"
+                    class="mt-4 flex items-center gap-3 p-3 rounded-md hover:bg-gray-100 text-red-600"
+                >
+                    Logout
+                </button>
+            </nav>
+
+            <div class="mt-auto text-xs text-gray-500">© SmartGrip</div>
+        </aside>
+
+        <!-- Header Mobile & Tablet -->
+        <header
+            class="lg:hidden fixed top-0 left-0 right-0 bg-white shadow z-30"
+        >
+            <div class="flex items-center justify-between px-4 py-3">
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                    <img
+                        src="./img/logo smartgrip.png"
+                        alt="logo"
+                        class="w-8 h-8"
+                    />
+                    <span class="font-semibold">SmartGrip</span>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!-- Notification Mobile -->
+                    <button id="notifMobile" class="relative">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            fill="currentColor"
+                            class="bi bi-bell-fill"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"
+                            />
+                        </svg>
+                        <span
+                            id="notifBadgeMobile"
+                            class="hidden absolute right-0 top-0 w-2 h-2 bg-red-500 rounded-full"
+                        ></span>
+                    </button>
+
+                    <!-- Hamburger -->
+                    <div class="relative">
+                        <button id="hamburgerBtn" class="text-gray-700">
+                            <svg
+                                class="w-7 h-7"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+                                <path
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                />
+                            </svg>
+                        </button>
+
+                        <!-- Float Dropdown -->
+                        <div
+                            id="mobileMenu"
+                            class="hidden absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40"
+                        >
+                            <nav class="flex flex-col p-2 text-sm">
+                                <a
+                                    href="dashboard.html"
+                                    class="p-2 rounded hover:bg-gray-100 flex items-center gap-2"
+                                    >Dashboard</a
+                                >
+                                <a
+                                    href="insights.html"
+                                    class="p-2 rounded hover:bg-gray-100 flex items-center gap-2"
+                                    >Graph Insights</a
+                                >
+                                <a
+                                    href="change-password.html"
+                                    class="p-2 rounded hover:bg-gray-100 flex items-center gap-2"
+                                    >Ganti Password</a
+                                >
+                                <button
+                                    id="logoutMobile"
+                                    class="p-2 text-red-600 text-left flex items-center gap-2"
+                                >
+                                    Logout
+                                </button>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Section Card Device Online/Offline -->
+        <main class="lg:ml-64 p-6">
+            <h2 class="text-xl font-semibold mb-4">Device Status</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card Online -->
+                <div
+                    class="p-6 rounded-2xl shadow-md bg-gradient-to-r from-[#2F5EEA] to-[#8937EA] text-white flex items-center justify-between"
+                >
+                    <div>
+                        <h3 class="text-lg font-semibold">Device Online</h3>
+                        <p id="onlineCount" class="text-3xl font-bold mt-2">
+                            0
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card Offline -->
+                <div
+                    class="p-6 rounded-2xl shadow-md bg-red-400 border flex items-center justify-between"
+                >
+                    <div>
+                        <h3 class="text-lg font-semibold text-white">
+                            Device Offline
+                        </h3>
+                        <p
+                            id="offlineCount"
+                            class="text-3xl font-bold mt-2 text-white"
+                        >
+                            0
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Popup Notification -->
+        <div
+            id="notifPopup"
+            class="hidden fixed top-16 right-4 w-72 bg-white shadow-lg rounded-lg p-4 z-50"
+        >
+            <h3 class="font-semibold mb-2">Notifications</h3>
+            <ul id="notifList" class="text-sm text-gray-700 space-y-1">
+                <li>No notifications</li>
+            </ul>
+        </div>
+
+        <!-- Section Maps -->
+        <section class="lg:ml-64 p-6">
+            <h2 class="text-xl font-semibold mb-4">Device Maps</h2>
+
+            <!-- Map Container -->
+            <div
+                class="relative w-full h-[calc(100vh-300px)] rounded-2xl shadow-md"
+            >
+                <div id="map" class="w-full h-full rounded-2xl">
+                    <!-- Card Device Info (pojok kiri bawah) -->
+                    <div
+                        id="device-info"
+                        class="absolute bottom-4 left-4 w-80 hidden z-[9999]"
+                    >
+                        <!-- Isi card muncul di JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaflet CSS & JS -->
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet/dist/leaflet.css"
+        />
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+        <script>
+            // toggle dropdown mobile
+            const hamburgerBtn = document.getElementById("hamburgerBtn");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            hamburgerBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                mobileMenu.classList.toggle("hidden");
+            });
+
+            document.addEventListener("click", (e) => {
+                if (
+                    !mobileMenu.contains(e.target) &&
+                    !hamburgerBtn.contains(e.target)
+                ) {
+                    mobileMenu.classList.add("hidden");
+                }
+            });
+
+            // Logout
+            const logoutDesktop = document.getElementById("logoutDesktop");
+            const logoutMobile = document.getElementById("logoutMobile");
+
+            logoutDesktop.addEventListener("click", () => {
+                localStorage.removeItem("token");
+                window.location.href = "login.html";
+            });
+            logoutMobile.addEventListener("click", () => {
+                localStorage.removeItem("token");
+                window.location.href = "login.html";
+            });
+
+            // Notification
+            const notifDesktop = document.getElementById("notifDesktop");
+            const notifMobile = document.getElementById("notifMobile");
+            const notifPopup = document.getElementById("notifPopup");
+            const notifList = document.getElementById("notifList");
+            const notifBadgeDesktop =
+                document.getElementById("notifBadgeDesktop");
+            const notifBadgeMobile =
+                document.getElementById("notifBadgeMobile");
+
+            // Klik button notif → tampilkan popup
+            function toggleNotifPopup() {
+                notifPopup.classList.toggle("hidden");
+            }
+
+            notifDesktop.addEventListener("click", toggleNotifPopup);
+            notifMobile.addEventListener("click", toggleNotifPopup);
+
+            async function checkAlerts() {
+                try {
+                    const res = await fetch(
+                        "http://localhost:5000/api/sensors/alerts"
+                    );
+                    const data = await res.json();
+
+                    if (data.alerts.length > 0) {
+                        notifList.innerHTML = ""; // kosongkan list dulu
+
+                        data.alerts.forEach((alert) => {
+                            notifList.innerHTML +=
+                                "<li class='text-red-600'> " +
+                                alert.message +
+                                "</li>";
+                        });
+
+                        notifBadgeDesktop.classList.remove("hidden");
+                        notifBadgeMobile.classList.remove("hidden");
+
+                        // Reset otomatis setelah 12 jam (43200000 ms)
+                        setTimeout(() => {
+                            notifList.innerHTML = "<li>No notifications</li>";
+                            notifBadgeDesktop.classList.add("hidden");
+                            notifBadgeMobile.classList.add("hidden");
+                        }, 43200000);
+                    }
+                } catch (err) {
+                    console.error("Error fetching alerts:", err);
+                }
+            }
+
+            // Panggil pertama kali
+            checkAlerts();
+
+            // Auto cek tiap 30 detik
+            setInterval(checkAlerts, 30000);
+
+            // Ambil data device online/offline dari API
+            async function fetchDeviceSummary() {
+                try {
+                    const res = await fetch(
+                        "http://localhost:5000/api/devices/summary"
+                    );
+                    const data = await res.json();
+
+                    document.getElementById("onlineCount").textContent =
+                        data.online;
+                    document.getElementById("offlineCount").textContent =
+                        data.offline;
+                } catch (err) {
+                    console.error("Failed to fetch device summary:", err);
+                }
+            }
+
+            // load saat page dibuka
+            fetchDeviceSummary();
+
+            // optional: refresh otomatis tiap 10 detik
+            setInterval(fetchDeviceSummary, 10000);
+
+            // Akhir Navbar dan Device Status -->
+
+            // Init map
+            const map = L.map("map").setView([-7.4246, 109.2396], 13);
+
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution: "&copy; OpenStreetMap contributors",
+            }).addTo(map);
+
+            // Load devices & pasang marker
+            async function loadDevices() {
+                try {
+                    const token = localStorage.getItem("token");
+                    if (!token) {
+                        console.error("Token tidak ditemukan di localStorage");
+                        return;
+                    }
+
+                    const res = await fetch(
+                        "http://localhost:5000/api/devices",
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                "Content-Type": "application/json",
+                            },
+                        }
+                    );
+
+                    if (!res.ok)
+                        throw new Error(`HTTP error! status: ${res.status}`);
+
+                    const devices = await res.json();
+                    const infoBox = document.getElementById("device-info");
+
+                    for (const d of devices) {
+                        const detailRes = await fetch(
+                            `http://localhost:5000/api/devices/${d._id}/details`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    "Content-Type": "application/json",
+                                },
+                            }
+                        );
+
+                        if (!detailRes.ok) continue;
+
+                        const detail = await detailRes.json();
+                        const lat = parseFloat(detail.gps_lat);
+                        const lng = parseFloat(detail.gps_long);
+
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            const marker = L.marker([lat, lng]).addTo(map);
+
+                            marker.on("click", () => {
+                                // format tanggal
+                                const lastSeen = detail.last_seen
+                                    ? new Date(detail.last_seen).toLocaleString(
+                                          "id-ID",
+                                          {
+                                              dateStyle: "long",
+                                              timeStyle: "short",
+                                          }
+                                      )
+                                    : "-";
+
+                                infoBox.innerHTML = `
+<div class="bg-white rounded-xl shadow-lg p-4 border border-gray-200">
+    <!-- Header Device -->
+    <div class="flex items-start justify-between mb-4">
+        <div>
+            <h3 class="text-lg font-semibold text-gray-800">${
+                detail.nama_device
+            }</h3>
+            <p class="text-sm text-gray-500 mt-1">
+                ${detail.nama_karyawan || "-"} - ${detail.nomor_karyawan || "-"}
+            </p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex items-center">
+            <!-- Edit Button -->
+            <button 
+                id="edit-device" 
+                class="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded-lg shadow transition"
+                title="Edit Device"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" 
+                     class="bi bi-pen-fill" viewBox="0 0 16 16">
+                  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1-.131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                </svg>
+                <span class="text-sm">Edit</span>
+            </button>
+
+            <!-- Close Button -->
+            <button 
+                id="close-info" 
+                class="ml-3 bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg shadow transition text-sm"
+                title="Close"
+            >
+                ✖
+            </button>
+        </div>
+    </div>
+
+    <!-- Device Details -->
+    <div class="space-y-2 text-sm text-gray-700">
+        <p><span class="font-medium">Gyroscope:</span> ${
+            detail.gyroscope_value ?? "-"
+        }°</p>
+        <p><span class="font-medium">Koordinat:</span> ${lat}, ${lng}</p>
+        <p><span class="font-medium">Status:</span> 
+            <span class="${
+                detail.status === "online"
+                    ? "text-green-600 font-semibold"
+                    : "text-red-600 font-semibold"
+            }">
+                ${detail.status}
+            </span>
+        </p>
+        <p class="text-xs text-gray-400">Terakhir dilihat: ${lastSeen}</p>
+    </div>
+</div>
+`;
+
+                                infoBox.classList.remove("hidden");
+
+                                // event close button
+                                document
+                                    .getElementById("close-info")
+                                    .addEventListener("click", () => {
+                                        infoBox.classList.add("hidden");
+                                    });
+
+                                // event edit button
+                                document
+                                    .getElementById("edit-device")
+                                    .addEventListener("click", () => {
+                                        openEditModal(detail); // panggil modal edit yg sudah ada
+                                    });
+
+                                // pindah view map
+                                map.setView([lat, lng], 15);
+                            });
+                        }
+                    }
+                } catch (err) {
+                    console.error("Failed to load devices:", err);
+                }
+            }
+
+            loadDevices();
+        </script>
+
+        <!-- Spacer agar konten tidak ketutup header -->
+        <div class="h-14 lg:hidden"></div>
+    </body>
+</html>

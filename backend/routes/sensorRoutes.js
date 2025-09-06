@@ -1,5 +1,6 @@
 const express = require("express");
 const SensorData = require("../models/SensorData");
+const Device = require("../models/Device");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -57,6 +58,35 @@ router.get("/device/:deviceId", protect, async (req, res) => {
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+// GET alerts if gyroscope > 210
+router.get("/alerts", async (req, res) => {
+    try {
+        // Ambil data sensor dengan gyroscope_value > 210
+        const alerts = await SensorData.find({ gyroscope_value: { $gt: 210 } })
+            .populate("device_id", "nama_device")
+            .lean();
+
+        if (alerts.length === 0) {
+            return res.json({ alerts: [] });
+        }
+
+        // Format notifikasi
+        const notifMessages = alerts.map((a) => ({
+            device: a.device_id?.nama_device || "Unknown Device",
+            value: a.gyroscope_value,
+            timestamp: a.createdAt,
+            message: `⚠️ ${
+                a.device_id?.nama_device || "Device"
+            } bahaya!\ngyroscope = ${a.gyroscope_value}°`,
+        }));
+
+        res.json({ alerts: notifMessages });
+    } catch (error) {
+        console.error("Error fetching alerts:", error);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
